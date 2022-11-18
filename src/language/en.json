@@ -1,0 +1,131 @@
+{
+  "common": {
+    "language": "Language",
+    "options": "Options",
+    "preview": "Preview",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel":  "Cancel"
+  },
+  "navigation": {
+    "add-new-user": "Add new user",
+    "add-new-vehicle": "Add new vehicle",
+    "add-new-reservation": "Add new reservation",
+    "logout": "Logout"
+  },
+  "language": {
+    "eng": "English",
+    "mne": "Montenegrin"
+  },
+  "error-message": {
+    "api": "There has been an error!"
+  },
+  "sidebar": {
+    "clients": "Clients",
+    "vehicles": "Vehicles",
+    "reservations": "Reservations"
+  },
+  "dashboard": {
+    "welcome": "Welcome"
+  },
+  "clients": {
+    "placeholder": "Search clients",
+    "add-client": "Add client",
+    "edit-client": "Edit client",
+    "name": "Full name",
+    "number": "Id card/passport number",
+    "phone": "Phone number",
+    "email": "Email",
+    "first-reservation": "Date of first reservation",
+    "last-reservation": "Date of last reservation",
+    "note": "Note",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "country": "Country",
+    "success-add": "Client added successfully!",
+    "success-edit": "Client edited successfully!",
+    "success-delete": "Client deleted successfully!",
+    "placeholders": {
+      "firstName": "Insert first name",
+      "lastName": "Insert last name",
+      "number": "Insert number",
+      "email": "Insert email",
+      "country": "Select country"
+    },
+    "delete":{
+      "title":"Delete client",
+      "content":"Are you sure you want to delete client?"
+    }
+  },
+  "validation": {
+    "required": "Field required!",
+    "invalid": "Field invalid!",
+    "min": "Field must have at least {number} characters!",
+    "max": "Field cannot have more than {number} characters!",
+    "min-year":"Field cannot have year less than {year}",
+    "max-year":"Field cannot have year greater than {year}",
+    "min-date":"Date cannot be less than today: {date}",
+    "min-seats":"Number of seats cannot be less than {number}",
+    "max-seats":"Number of seats cannot be greater than {number}",
+    "min-price":"Price cannot be less than {number}"
+  },
+  "login":{
+    "email":"Email",
+    "password":"Password",
+    "btn-label":"Log in",
+    "placeholders":{
+      "email":"Insert email",
+      "password":"Insert password"
+    }
+  },
+  "vehicles":{
+    "placeholder":"Search vehicles",
+    "add-vehicle":"Add vehicle",
+    "edit-vehicle":"Edit vehicle",
+    "plates":"Plates number",
+    "year":"Year",
+    "type":"Vehicles type",
+    "seats":"Number of seats",
+    "price":"Price per day",
+    "note":"Note",
+    "placeholders":{
+      "plates":"Insert plates number",
+      "year":"Insert year",
+      "type":"Insert vehicles type",
+      "seats":"Insert number of seats",
+      "price":"Insert price per day",
+      "note":"Insert note"
+    },
+    "delete":{
+      "title":"Delete vehicle",
+      "content":"Are you sure you want to delete vehicle?"
+    }
+  },
+  "reservations":{
+    "placeholder":"Search reservations",
+    "add-reservation":"Add reservation",
+    "edit-reservation":"Edit reservation",
+    "create-reservation":"Create reservation",
+    "clients-name":"Clients name",
+    "vehicles-plates":"Vehicles plates",
+    "date-from":"Date from",
+    "date-to":"Date to",
+    "pick-up-location":"Pick up location",
+    "drop-off-location":"Drop off location",
+    "total-price":"Total price",
+    "vehicle-type":"Vehicles type",
+    "placeholders":{
+      "client":"Choose client",
+      "date-from":"Insert date from",
+      "date-to":"Insert date to",
+      "pick-up":"Insert pick up location",
+      "drop-off":"Insert drop off location",
+      "total-price":"Insert total price"
+    },
+    "delete":{
+      "title":"Delete reservation",
+      "content":"Are you sure you want to delete reservation?"
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "common": {
+    "language": "Jezik",
+    "options": "Opcije",
+    "preview": "Pregled",
+    "edit": "Izmijeni",
+    "delete": "Obrisi",
+    "save": "Sacuvaj",
+    "cancel":  "Obrisi"
+  },
+  "navigation": {
+    "add-new-user": "Dodaj novog korisnika",
+    "add-new-vehicle": "Dodaj novo vozilo",
+    "add-new-reservation": "Dodaj novu rezervaciju",
+    "logout": "Izloguj se"
+  },
+  "language": {
+    "eng": "Engleski",
+    "mne": "Crnogorski"
+  },
+  "sidebar": {
+    "clients": "Klijenti",
+    "vehicles": "Vozila",
+    "reservations": "Rezervacije"
+  },
+  "dashboard": {
+    "welcome": "Dobrodosli"
+  },
+  "clients": {
+    "placeholder": "Pretrazi klijente",
+    "add-client": "Dodaj klijenta",
+    "edit-client": "Izmijeni klijenta",
+    "name": "Ime i prezime",
+    "number": "Broj licne karte/pasosa",
+    "phone": "Broj telefona",
+    "email": "Email",
+    "first-reservation": "Datum prve rezervacije",
+    "last-reservation": "Datum poslednje rezervacije",
+    "note": "Napomena",
+    "delete":{
+      "title":"Obrisi klijenta",
+      "content":"Da li ste sigurni da zelite da obrisete klijenta?"
+    }
+  },
+  "validation": {
+    "required": "Polje je obavezno!",
+    "invalid": "Polje je nevalidno!",
+    "min": "Polje mora imati vise od {number} karaktera!",
+    "max": "Polje ne moze imati manje od {number} karaktera!",
+    "min-year":"Polje ne moze sadrzati godinu manju od {year}",
+    "max-year":"Polje ne moze sadrzati godinu vecu od {year}",
+    "min-date":"Datum ne moze biti manji od danasnjeg: {date}",
+    "min-seats":"Broj sjedista ne moze biti manji od {number}",
+    "max-seats":"Broj sjedista ne moze biti veci od {number}",
+    "min-price":"Cijena ne moze biti manja od {number}"
+  },
+  "login":{
+    "email":"Email",
+    "password":"Lozinka",
+    "btn-label":"Prijavi se",
+    "placeholders":{
+      "email":"Unesite email",
+      "password":"Unesite lozinku"
+    }
+  },
+  "vehicles":{
+    "placeholder":"Pretrazi vozila",
+    "add-vehicle":"Dodaj vozilo",
+    "edit-vehicle":"Izmijeni vozilo",
+    "plates":"Broj tablica",
+    "year":"Godina",
+    "type":"Tip vozila",
+    "seats":"Broj sjedista",
+    "price":"Cijena po danu",
+    "note":"Napomena",
+    "placeholders":{
+      "plates":"Unesite broj tablica",
+      "year":"Unesite godinu",
+      "type":"Unesite tip vozila",
+      "seats":"Unesite broj sjedista",
+      "price":"Unesite cijenu po danu",
+      "note":"Unesite napomenu"
+    },
+    "delete":{
+      "title":"Obrisi vozilo",
+      "content":"Da li ste sigurni da zelite da obrisete vozilo?"
+    }
+  },
+  "reservations":{
+    "placeholder":"Pretrazi rezervacije",
+    "add-reservation":"Dodaj rezervaciju",
+    "edit-reservation":"Izmijeni rezervaciju",
+    "create-reservation":"Kreiraj rezervaciju",
+    "clients-name":"Ime klijenta",
+    "vehicles-plates":"Broj tablica vozila",
+    "date-from":"Datum od",
+    "date-to":"Datum do",
+    "pick-up-location":"Lokacija preuzimanja",
+    "drop-off-location":"Lokacija vracanja",
+    "total-price":"Ukupna cijena",
+    "vehicle-type":"Tip vozila",
+    "placeholders":{
+      "client":"Izaberi klijenta",
+      "date-from":"Unesi datum od",
+      "date-to":"Unesi datum do",
+      "pick-up":"Unesi lokaciju preuzimanja",
+      "drop-off":"Unesi lokaciju vracanja",
+      "total-price":"Unesi ukupnu cijenu"
+    },
+    "delete":{
+      "title":"Obrisi rezervaciju",
+      "content":"Da li ste sigurni da zelite da obrisete rezervaciju?"
+    }
+  }
+}
