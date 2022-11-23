@@ -11,12 +11,13 @@ import Login from "./pages/login/Login";
 import Vehicles from './pages/vehicles/Vehicles';
 import Reservations from './pages/reservations/Reservations';
 import AddReservation from './pages/addReservation/AddReservation';
+import Forbidden from './pages/forbidden/Forbidden';
 
-//ex2
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
         <Route path="/" element={<ContextsWrapper><AuthLayout/></ContextsWrapper>}>
+          <Route path='forbidden' element={<Forbidden/>}/>
           <Route index element={<Dashboard/>}/>
           <Route path={routes.CLIENTS.path} element={<Clients/>}/>
           <Route path={routes.VEHICLES.path} element={<Vehicles/>}/>
@@ -31,10 +32,7 @@ const router = createBrowserRouter(
 
 function App() {
   return (
-  // <div>
-  //   <Index/>
-  //   </div>
-      <RouterProvider router={router}/>
+    <RouterProvider router={router}/>
   );
 }
 

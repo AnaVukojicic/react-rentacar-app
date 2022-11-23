@@ -8,11 +8,23 @@ import Button from "../../components/buttons/button/Button";
 import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableButtonGroup";
 import VehicleForm from './vehicleForm/VehicleForm';
 import DeleteForm from './deleteForm/DeleteForm';
+import { vehicleService } from '../../services/VehicleService';
+import { useQuery } from 'react-query';
+import { storageService } from '../../services/StorageService';
+import { storageKeys, userRoles } from '../../config/config';
+import { useNavigate } from 'react-router-dom';
 
 
 const Vehicles = () => {
+    const navigate=useNavigate();
     const {open, close} = useModal()
     const [query, setQuery] = useState("")
+
+    const {data: rows} = useQuery(['vehicles', query],
+        () => vehicleService.getAll(query), {
+            enabled: true,
+            initialData: []
+    })
 
     const openVehicleModal = (type, id = null) => {
         open({
@@ -36,12 +48,12 @@ const Vehicles = () => {
     const headers = [
         {
             title: t('vehicles.plates'),
-            dataIndex: 'plate_number',
+            dataIndex: 'plates',
             key: 'plates',
         },
         {
             title: t('vehicles.year'),
-            dataIndex: 'production_year',
+            dataIndex: 'year',
             key: 'year',
         },
         {
@@ -51,12 +63,12 @@ const Vehicles = () => {
         },
         {
             title: t('vehicles.seats'),
-            dataIndex: 'number_of_seats',
+            dataIndex: 'seats',
             key: 'seats',
         },
         {
             title: t('vehicles.price'),
-            dataIndex: 'daily_rate',
+            dataIndex: 'price',
             key: 'price',
         },
         {
@@ -70,16 +82,21 @@ const Vehicles = () => {
             key: 'x',
             render: (text, record) => <TableButtonGroup
                 onEdit={() => {
-                    openVehicleModal("edit")
+                    openVehicleModal("edit",record?.id)
                     console.log('edit');
                 }}
                 onDelete={() => {
-                    openDeleteModal();
+                    openDeleteModal(record?.id);
                 }}
             />
         },
     ];
 
+    useEffect(()=>{
+        if(storageService.exists(storageKeys.ROLE) && parseInt((storageService.get(storageKeys.ROLE)))!==userRoles.EMPLOYEE){
+            navigate('/forbidden');
+        }
+    },[])
 
     return <>
         <div className={classes['page-head']}>
@@ -88,18 +105,8 @@ const Vehicles = () => {
         </div>
         <div className={classes['table']}>
             <Table header={headers}
-                   rows={[{
-                    "id": 20,
-                    "plate_number": "ŽBPY879",
-                    "production_year": 2014,
-                    "type": "Hyundai",
-                    "number_of_seats": "5",
-                    "daily_rate": 23,
-                    "note": null,
-                    "created_at": "2022-11-17T09:52:09.000000Z",
-                    "updated_at": "2022-11-17T09:52:09.000000Z"
-                }]}
-                   onRowClick={(record) => openVehicleModal("preview")}
+                   rows={rows}
+                   onRowClick={(record) => openVehicleModal("preview",record?.id)}
             />
         </div>
     </>

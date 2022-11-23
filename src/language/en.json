@@ -19,7 +19,8 @@
     "mne": "Montenegrin"
   },
   "error-message": {
-    "api": "There has been an error!"
+    "api": "There has been an error!",
+    "wrong-credentials":"Wrong credentials!"
   },
   "sidebar": {
     "clients": "Clients",
@@ -65,7 +66,7 @@
     "max": "Field cannot have more than {number} characters!",
     "min-year":"Field cannot have year less than {year}",
     "max-year":"Field cannot have year greater than {year}",
-    "min-date":"Date cannot be less than today: {date}",
+    "min-date":"Date cannot be less than: {date}",
     "min-seats":"Number of seats cannot be less than {number}",
     "max-seats":"Number of seats cannot be greater than {number}",
     "min-price":"Price cannot be less than {number}"

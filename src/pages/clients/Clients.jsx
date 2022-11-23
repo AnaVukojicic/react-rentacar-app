@@ -10,9 +10,15 @@ import {clientService} from "../../services/ClientService";
 import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableButtonGroup";
 import {useQuery} from "react-query";
 import DeleteForm from './deleteForm/DeleteForm';
+import { useUser } from '../../contexts/UserContext';
+import { storageKeys, userRoles } from '../../config/config';
+import { useNavigate } from 'react-router-dom';
+import { storageService } from '../../services/StorageService';
 
 
 const Clients = () => {
+    const {userData}=useUser();
+    const navigate=useNavigate();
     const {open, close} = useModal()
     const [query, setQuery] = useState("")
 
@@ -87,25 +93,31 @@ const Clients = () => {
                     openClientModal("edit", record?.id)
                 }}
                 onDelete={() => {
-                    openDeleteModal()
+                    openDeleteModal(record?.id)
                 }}
             />
         },
     ];
 
+    useEffect(()=>{
+        if(storageService.exists(storageKeys.ROLE) && parseInt((storageService.get(storageKeys.ROLE)))!==userRoles.EMPLOYEE){
+            navigate('/forbidden');
+        }
+    },[])
+
 
     return <>
-        <div className={classes['page-head']}>
-            <SearchField className={classes['search']} placeholder={t('clients.placeholder')} onSearch={(e) => {
-                setQuery(e)
-            }}/>
-            <Button label={t('clients.add-client')} onClick={(e) => openClientModal('add')}/>
-        </div>
-        <div className={classes['table']}>
-            <Table header={headers}
-                   rows={rows}
-                   onRowClick={(record) => openClientModal("preview", record?.id)}/>
-        </div>
+            <div className={classes['page-head']}>
+                <SearchField className={classes['search']} placeholder={t('clients.placeholder')} onSearch={(e) => {
+                    setQuery(e)
+                }}/>
+                <Button label={t('clients.add-client')} onClick={(e) => openClientModal('add')}/>
+            </div>
+            <div className={classes['table']}>
+                <Table header={headers}
+                    rows={rows}
+                    onRowClick={(record) => openClientModal("preview", record?.id)}/>
+            </div>
     </>
 }
 

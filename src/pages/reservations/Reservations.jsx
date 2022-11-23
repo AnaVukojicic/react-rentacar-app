@@ -9,12 +9,22 @@ import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableBut
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
 import DeleteForm from './deleteForm/DeleteForm';
+import { reservationService } from '../../services/ReservationService';
+import { useQuery } from 'react-query';
 import ReservationForm from './reservationForm/ReservationForm';
+import { storageService } from '../../services/StorageService';
+import { storageKeys, userRoles } from '../../config/config';
 
 const Reservations = () => {
     const {open, close} = useModal()
     const [query, setQuery] = useState("")
     const navigate=useNavigate();
+
+    const {data: rows} = useQuery(['reservations', query],
+        () => reservationService.getAll(query), {
+            enabled: true,
+            initialData: []
+    })
 
     const openReservationModal = (type, id = null) => {
         open({
@@ -34,38 +44,44 @@ const Reservations = () => {
     const headers = [
         {
             title: t('reservations.clients-name'),
-            dataIndex: 'clients-name',
-            key: 'clients-name',
+            dataIndex: 'clientsName',
+            key: 'clientsName',
+            render: (text, record) => record.getClientsName()
         },
         {
             title: t('reservations.vehicles-plates'),
-            dataIndex: 'vehicles-plates',
-            key: 'vehicles-plates',
+            dataIndex: 'vehiclePlates',
+            key: 'vehiclesPlates',
+            render: (text,record)=>record.getVehiclePlates()
         },
         {
             title: t('reservations.date-from'),
-            dataIndex: 'date-from',
-            key: 'date-from',
+            dataIndex: 'dateFrom',
+            key: 'dateFrom',
+            render:(text,record)=>record?.getFormattedDateFrom()
         },
         {
             title: t('reservations.date-to'),
-            dataIndex: 'date-to',
-            key: 'date-to',
+            dataIndex: 'dateTo',
+            key: 'dateTo',
+            render:(text,record)=>record?.getFormattedDateTo()
         },
         {
             title: t('reservations.pick-up-location'),
-            dataIndex: 'pick-up-location',
-            key: 'pick-up-location',
+            dataIndex: 'pickUp',
+            key: 'pickUp',
+            render:(text,record)=>record?.getPickUpName()
         },
         {
             title: t('reservations.drop-off-location'),
-            dataIndex: 'drop-off-location',
-            key: 'drop-off-location',
+            dataIndex: 'dropOff',
+            key: 'dropOff',
+            render:(text,record)=>record?.getDropOffName()
         },
         {
             title: t('reservations.total-price'),
-            dataIndex: 'total-price',
-            key: 'total-price',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice',
         },
         {
             title: '',
@@ -73,14 +89,20 @@ const Reservations = () => {
             key: 'x',
             render: (text, record) => <TableButtonGroup
                 onEdit={() => {
-                    openReservationModal("edit")
+                    openReservationModal("edit",record?.id)
                 }}
                 onDelete={() => {
-                    openDeleteModal();
+                    openDeleteModal(record?.id);
                 }}
             />
         },
     ];
+
+    useEffect(()=>{
+        if(storageService.exists(storageKeys.ROLE) && parseInt((storageService.get(storageKeys.ROLE)))!==userRoles.EMPLOYEE){
+            navigate('/forbidden');
+        }
+    },[])
 
 
     return <>
@@ -90,46 +112,8 @@ const Reservations = () => {
         </div>
         <div className={classes['table']}>
             <Table header={headers}
-                   rows={[{
-                    "id": 1,
-                    "customer": {
-                        "id": 7,
-                        "email": "customer4@email.com",
-                        "first_name": "Arden",
-                        "last_name": "Hoeger",
-                        "country": {
-                            "id": 12,
-                            "name": "Montserrat"
-                        },
-                        "passport_number": "469447439",
-                        "phone_number": "323-772-2755",
-                        "note": null,
-                        "role": {
-                            "id": 2,
-                            "name": "User"
-                        }
-                    },
-                    "vehicle": {
-                        "plate_number": "ŽBXU40",
-                        "production_year": 2018,
-                        "type": "BMW",
-                        "number_of_seats": "7",
-                        "daily_rate": 21,
-                        "note": null
-                    },
-                    "date_from": "2022-05-05",
-                    "pickup_location": {
-                        "id": 4,
-                        "name": "Žabljak"
-                    },
-                    "drop_off_location": {
-                        "id": 4,
-                        "name": "Žabljak"
-                    },
-                    "price": "210",
-                    "created_at": "2022-11-17T09:52:09.000000Z"
-                }]}
-                   onRowClick={(record) => openReservationModal("preview")}
+                   rows={rows}
+                   onRowClick={(record) => openReservationModal("preview",record?.id)}
             />
         </div>
     </>

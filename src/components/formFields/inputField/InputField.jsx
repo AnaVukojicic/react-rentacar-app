@@ -10,7 +10,8 @@ const InputField = ({
                         placeholder,
                         error,
                         disabled = false,
-                        control
+                        control,
+                        type='text'
 }) => {
     return <Wrapper label={label} error={error}>
         {control &&
@@ -19,6 +20,7 @@ const InputField = ({
             control={control}
             render={({ field }) => (
                 <Input
+                type={type}
                 placeholder={placeholder}
                 status={error ? "error" : ''}
                 disabled={disabled}

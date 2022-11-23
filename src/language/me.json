@@ -18,6 +18,10 @@
     "eng": "Engleski",
     "mne": "Crnogorski"
   },
+  "error-message": {
+    "api": "Doslo je do greske!",
+    "wrong-credentials":"Pogresni kredencijali!"
+  },
   "sidebar": {
     "clients": "Klijenti",
     "vehicles": "Vozila",
@@ -49,7 +53,7 @@
     "max": "Polje ne moze imati manje od {number} karaktera!",
     "min-year":"Polje ne moze sadrzati godinu manju od {year}",
     "max-year":"Polje ne moze sadrzati godinu vecu od {year}",
-    "min-date":"Datum ne moze biti manji od danasnjeg: {date}",
+    "min-date":"Datum ne moze biti manji: {date}",
     "min-seats":"Broj sjedista ne moze biti manji od {number}",
     "max-seats":"Broj sjedista ne moze biti veci od {number}",
     "min-price":"Cijena ne moze biti manja od {number}"

@@ -3,6 +3,8 @@ import { DatePicker } from 'antd';
 import Wrapper from "../wrapper/Wrapper";
 import "./DateField.scss";
 import { Controller } from 'react-hook-form';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const DateField = ({
                         label,
@@ -11,7 +13,8 @@ const DateField = ({
                         placeholder,
                         disabled = false,
                         control,
-                        picker='date'
+                        picker='date',
+                        onChange=(d,ds)=>{}
 }) => {
     return( 
         <Wrapper label={label} error={error}>
@@ -19,16 +22,18 @@ const DateField = ({
             <Controller name={name} control={control} render={({ field }) => (
                 <DatePicker
                     style={{ width: '100%' }}
+                    format={"DD.MM.YYYY."}
                     picker={picker}
                     placeholder={placeholder}
                     status={error ? "error" : ''}
                     disabled={disabled}
                     className={"__date_field"}
                     {...field}
+                    onChange={(d,ds)=>{onChange(d,ds);field.onChange(d,ds)}}
                 />
             )}/>
         }
-    </Wrapper>
+        </Wrapper>
     );
 }
 

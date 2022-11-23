@@ -12,7 +12,7 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { regex } from '../../utils/regex';
-import { useEffect } from 'react';
+import { message } from 'antd';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -21,12 +21,14 @@ const Login = () => {
         authService.login(email, password)
             .then(r => {
                 storageService.set(storageKeys.USER, r.getToken())
+                storageService.set(storageKeys.ROLE,r.role_id)
                 setTimeout(() => {
                     navigate('/')
                 }, 300)
             })
             .catch(err => {
                 console.log(err?.data)
+                message.error(t('error-message.wrong-credentials'))
             })
     }
 
@@ -43,6 +45,7 @@ const Login = () => {
 
     const onSubmit=(data)=>{
         console.log(data);
+        login(data?.email,data?.password)
     }
 
     return( 
@@ -64,7 +67,7 @@ const Login = () => {
                                 control={control}
                                 error={errors?.password?.message}
                     />
-                    <Button type='button' label={t('login.btn-label')} onClick={() => {login("user1@email.com", "12345678")}}/> 
+                    <Button type='submit' label={t('login.btn-label')} onClick={()=>{}}/> 
                 </form>
             </div>
         </div>

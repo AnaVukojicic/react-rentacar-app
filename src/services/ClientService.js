@@ -45,7 +45,8 @@ class ClientService {
             "country_id": data?.country,
             "passport_number": data?.idNumber,
             "phone_number": data?.phone,
-            "email": data?.email
+            "email": data?.email,
+            "note":data?.note
         };
         return requestInstance.post(this.api.users, formData)
             .then(r => new ClientModel(r.data))
@@ -57,7 +58,8 @@ class ClientService {
             "first_name": data?.firstName,
             "last_name": data?.lastName,
             "country_id": data?.country,
-            "phone_number": data?.phone
+            "phone_number": data?.phone,
+            "note":data?.note
         };
         return requestInstance.put(`${this.api.users}/${data?.id}`, formData)
             .then(r => new ClientModel(r.data))

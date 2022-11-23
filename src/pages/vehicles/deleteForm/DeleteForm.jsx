@@ -1,16 +1,29 @@
 import React from 'react';
 import {t} from 'react-switch-lang';
-import {useForm} from 'react-hook-form';
+import {get, useForm} from 'react-hook-form';
 import FormButtonGroup from '../../../components/buttons/formButtonGroup/FormButtonGroup';
 import classes from './DeleteForm.module.scss';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { message } from 'antd';
+import { vehicleService } from '../../../services/VehicleService';
 
 const DeleteForm = ({id,cancel}) => {
+    const queryClient = useQueryClient();
+    const { handleSubmit,reset,control } = useForm({});
 
-    const { handleSubmit } = useForm({});
+    const deleteVehicle = useMutation(() => vehicleService.delete(id)
+        .then(r => {
+            message.success('Success');
+            queryClient.invalidateQueries("vehicles")
+            cancel()
+        })
+        .catch(err => {
+            console.log(err?.response?.data)
+            message.error(t('error-message.api'))
+        }))
 
-    const onSubmit = (data) => {
-        console.log(data)
-        console.log('DELETE')
+    const onSubmit = () => {
+        deleteVehicle.mutate()
     }
 
     return <div>

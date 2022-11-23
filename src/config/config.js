@@ -4,7 +4,8 @@ export const userRoles = {
 }
 
 export const storageKeys = {
-    USER: 'user-key'
+    USER: 'user-key',
+    ROLE: 'user-role'
 }
 
 export const reactQueryConfig = {

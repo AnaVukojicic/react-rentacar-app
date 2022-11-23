@@ -77,7 +77,7 @@ const ClientForm = ({type, id, cancel, called=false}) => {
         email: yup.string().trim()
             .required(t('validation.required'))
             .email(t('validation.invalid')),
-        note: yup.string().trim().nullable().max(255,t('validation.max',{number:255}))
+        note: yup.string().trim().nullable(true).max(255,t('validation.max',{number:255}))
     })
 
     const { handleSubmit, control, reset, formState: {errors}

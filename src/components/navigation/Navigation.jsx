@@ -8,7 +8,7 @@ import {useUser} from "../../contexts/UserContext";
 import {t} from 'react-switch-lang';
 import {Link, useNavigate} from "react-router-dom";
 import Language from "./language/Language";
-import {userRoles} from "../../config/config";
+import {storageKeys, userRoles} from "../../config/config";
 import {useModal} from "../../contexts/ModalContext";
 import ClientForm from "../../pages/clients/clientForm/ClientForm";
 import {storageService} from "../../services/StorageService";
@@ -50,7 +50,7 @@ const Navigation = () => {
             <img src={Logo} alt="away" className={"logo-img"}/>
         </Menu.Item>
         <Menu.Item key='user-name' className={"item item-inactive"}>{userData?.firstName} {userData?.lastName}</Menu.Item>
-        {userData?.role === userRoles.EMPLOYEE ?
+        {parseInt(storageService.get(storageKeys.ROLE)) === userRoles.EMPLOYEE ?
             <Menu.SubMenu key='options' className={"item item-inactive"} title={t('common.options')}>
                 <Menu.Item key='add-user' onClick={() => addClient()}>{t('navigation.add-new-user')}</Menu.Item>
                 <Menu.Item key='add-vehicle' onClick={() => addVehicle()}>{t('navigation.add-new-vehicle')}</Menu.Item>
@@ -60,7 +60,7 @@ const Navigation = () => {
                 </Menu.Item>
             </Menu.SubMenu>
             :
-            <Menu.Item key='language'>
+            <Menu.Item key='language' className='item item-inactive'>
                 <Language/>
             </Menu.Item>
         }

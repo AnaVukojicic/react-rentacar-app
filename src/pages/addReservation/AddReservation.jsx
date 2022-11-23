@@ -4,44 +4,60 @@ import {t} from 'react-switch-lang';
 import Table from "../../components/table/Table";
 import {useModal} from "../../contexts/ModalContext";
 import classes from "../clients/Clients.module.scss";
+import { useQuery } from 'react-query';
+import { vehicleService } from '../../services/VehicleService';
+import AddReservationForm from './addReservationForm/AddReservationForm';
 import { useNavigate } from 'react-router-dom';
-import ReservationForm from '../reservations/reservationForm/ReservationForm';
+import { storageService } from '../../services/StorageService';
+import { storageKeys, userRoles } from '../../config/config';
 
 
 const AddReservation = () => {
+    const navigate=useNavigate();
     const {open, close} = useModal()
     const [query, setQuery] = useState("")
-    const navigate=useNavigate();
 
-    const openReservationModal = (type,id = null) => {
+    const {data: rows} = useQuery(['vehicles', query],
+        () => vehicleService.getAll(query), {
+            enabled: true,
+            initialData: []
+    })
+
+    const openReservationModal = (id = null) => {
         open({
             title: t('reservations.create-reservation'),
-            content: <ReservationForm type={type} id={id} cancel={close}/>
+            content: <AddReservationForm id={id} cancel={close}/>
         })
     }
 
     const headers = [
         {
             title: t('vehicles.plates'),
-            dataIndex: 'plate_number',
+            dataIndex: 'plates',
             key: 'plates',
         },
         {
             title: t('vehicles.year'),
-            dataIndex: 'production_year',
+            dataIndex: 'year',
             key: 'year',
         },
         {
             title: t('vehicles.seats'),
-            dataIndex: 'number_of_seats',
+            dataIndex: 'seats',
             key: 'seats',
         },
         {
             title: t('vehicles.price'),
-            dataIndex: 'daily_rate',
+            dataIndex: 'price',
             key: 'price',
         }
     ];
+
+    useEffect(()=>{
+        if(storageService.exists(storageKeys.ROLE) && parseInt((storageService.get(storageKeys.ROLE)))!==userRoles.EMPLOYEE){
+            navigate('/forbidden');
+        }
+    },[])
 
 
     return <>
@@ -50,15 +66,8 @@ const AddReservation = () => {
         </div>
         <div className={classes['table']}>
             <Table header={headers}
-                   rows={[{
-                        "plate_number": "ŽBXU40",
-                        "production_year": 2018,
-                        "type": "BMW",
-                        "number_of_seats": "7",
-                        "daily_rate": 21,
-                        "note": null
-                    }]}
-                   onRowClick={(record) => openReservationModal('add')}
+                   rows={rows}
+                   onRowClick={(record) => openReservationModal(record?.id)}
             />
         </div>
     </>

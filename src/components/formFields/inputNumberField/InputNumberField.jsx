@@ -11,7 +11,8 @@ const InputNumberField = ({
                         control,
                         placeholder,
                         disabled = false,
-                        step='1'
+                        step='1',
+                        readOnly=false
 }) => {
     return( 
         <Wrapper label={label} error={error}>
@@ -24,6 +25,7 @@ const InputNumberField = ({
                         className={"__input_number_field"}
                         step={step}
                         style={{width:'100%'}}
+                        readOnly={readOnly}
                         {...field}
                     />
                 )}/>
