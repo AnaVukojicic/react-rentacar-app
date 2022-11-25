@@ -115,5 +115,17 @@
       "title":"Obrisi rezervaciju",
       "content":"Da li ste sigurni da zelite da obrisete rezervaciju?"
     }
+  },
+  "client":{
+    "pickup":"Lokacija preuzimanja: ",
+    "dropoff": "Lokacija vracanja: ",
+    "dateFrom": "Datum od: ",
+    "dateTo": "Datum do: ",
+    "price": "Cijena: ",
+    "previous":"Prethodne rezervacije",
+    "current":"Rezervacije u toku",
+    "future":"Buduce rezervacije",
+    "all":"Vidi sve",
+    "title":"Vase rezervacije"
   }
 }

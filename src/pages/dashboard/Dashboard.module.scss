@@ -1,0 +1,26 @@
+.container{
+    width: 90vw;
+    margin: auto;
+}
+
+.dashboard-title{
+    font-family: "Poppins-Medium",sans-serif;
+    font-size: 26px;
+    padding-bottom: 20px;
+    text-align: center;
+    margin: 0;
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.card-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.buttons{
+    display: flex;
+    justify-content: space-between;
+    padding: 70px 0;
+}

@@ -198,7 +198,7 @@ const ReservationForm = ({type,id, cancel}) => {
                 error={errors?.dateFrom?.message}
                 placeholder={dateFormatted}
                 control={control}
-                disabled={type==='preview'}
+                disabled={type==='preview' || type==='client-preview'}
                 onChange={(d,ds)=>onDateFromChange(d,ds)}
             />
             <DateField 
@@ -207,7 +207,7 @@ const ReservationForm = ({type,id, cancel}) => {
                 error={errors?.dateTo?.message}
                 placeholder={datePlusSevenFormatted}
                 control={control}
-                disabled={type==='preview'}
+                disabled={type==='preview' || type==='client-preview'}
                 onChange={(d,ds)=>onDateToChange(d,ds)}
             />
             <SelectField
@@ -217,7 +217,7 @@ const ReservationForm = ({type,id, cancel}) => {
                 options={cities}
                 placeholder={t('reservations.placeholders.pick-up')}
                 error={errors?.pickUp?.message}
-                disabled={type==='preview'}
+                disabled={type==='preview' || type==='client-preview'}
             />
             <SelectField
                 label={t('reservations.drop-off-location')}
@@ -226,7 +226,7 @@ const ReservationForm = ({type,id, cancel}) => {
                 options={cities}
                 placeholder={t('reservations.placeholders.drop-off')}
                 error={errors?.dropOff?.message}
-                disabled={type==='preview'}
+                disabled={type==='preview' || type==='client-preview'}
             />
             <InputNumberField 
                 label={t('reservations.total-price')}
@@ -237,7 +237,7 @@ const ReservationForm = ({type,id, cancel}) => {
                 value={price}
                 readOnly={true}
             />
-            {type==='preview' &&
+            {(type==='preview' || type==='client-preview') &&
             <>
             <InputField
                 label={t('vehicles.plates')}
@@ -279,6 +279,10 @@ const ReservationForm = ({type,id, cancel}) => {
                 error={errors?.vehiclePrice?.message}
                 disabled={true}
             />
+            </>
+            }
+            {type==='preview' &&
+            <>
             <InputField
                 label={t('reservations.clients-name')}
                 name="clientsName"

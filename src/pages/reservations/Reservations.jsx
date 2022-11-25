@@ -14,14 +14,17 @@ import { useQuery } from 'react-query';
 import ReservationForm from './reservationForm/ReservationForm';
 import { storageService } from '../../services/StorageService';
 import { storageKeys, userRoles } from '../../config/config';
+import { DatePicker } from 'antd';
+import '../../components/formFields/dateField/DateField.scss'
 
 const Reservations = () => {
     const {open, close} = useModal()
-    const [query, setQuery] = useState("")
+    const [query1, setQuery1] = useState("");
+    const [query2,setQuery2]=useState("");
     const navigate=useNavigate();
 
-    const {data: rows} = useQuery(['reservations', query],
-        () => reservationService.getAll(query), {
+    const {data: rows} = useQuery(['reservations', query1,query2],
+        () => reservationService.getAll(query1,query2), {
             enabled: true,
             initialData: []
     })
@@ -107,7 +110,16 @@ const Reservations = () => {
 
     return <>
         <div className={classes['page-head']}>
-            <SearchField className={classes['search']} placeholder={t('reservations.placeholder')} onSearch={(e) => { setQuery(e)}}/>
+            <DatePicker style={{ width: '100%' }} 
+                        placeholder="Select date from"
+                        onChange={(d,ds)=>setQuery1(ds)}
+                        className={"__date_field"}
+            />
+            <DatePicker style={{ width: '100%' }} 
+                        placeholder="Select date to"
+                        onChange={(d,ds)=>setQuery2(ds)}
+                        className={"__date_field"}
+            />
             <Button label={t('reservations.add-reservation')} onClick={()=>navigate(`/${routes.RESERVATIONS.addPath}`)}/>
         </div>
         <div className={classes['table']}>

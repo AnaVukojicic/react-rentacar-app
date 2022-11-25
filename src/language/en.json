@@ -128,5 +128,17 @@
       "title":"Delete reservation",
       "content":"Are you sure you want to delete reservation?"
     }
+  },
+  "client":{
+    "pickup":"Pick up location: ",
+    "dropoff": "Drop off location: ",
+    "dateFrom": "Date from: ",
+    "dateTo": "Date to: ",
+    "price": "Price: ",
+    "previous":"Previous reservations",
+    "current":"Current reservations",
+    "future":"Future reservations",
+    "all":"See all",
+    "title":"Your reservations"
   }
 }

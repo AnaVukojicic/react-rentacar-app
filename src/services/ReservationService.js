@@ -7,7 +7,8 @@ class ReservationService {
     }
 
     params = {
-        search: 'search='
+        date_from: 'date_from=',
+        date_to: 'date_to='
     }
 
     getReservationById(id){
@@ -16,10 +17,21 @@ class ReservationService {
             .catch(err => Promise.reject(err))
     }
 
-    getAll(query){
-        const queryParam = query?.length > 0 ? `?${this.params.search}${query}` : '';
-        return requestInstance.get(`${this.api.reservations}${queryParam}`)
+    getAll(query1,query2){
+        const queryParam1 = query1?.length > 0 ? `?${this.params.date_from}${query1}` : '';
+        const queryParam2= query2?.length > 0 ? (queryParam1 !== '' ? '&' : '?')`${this.params.date_to}${query2}` : '';
+        return requestInstance.get(`${this.api.reservations}${queryParam1}${queryParam2}`)
             .then(r => r?.data?.data?.map(item => new ReservationModel(item)))
+            .catch(err => Promise.reject(err))
+    }
+
+    getAllSorted(){
+        return requestInstance.get(`${this.api.reservations}`)
+            .then(r => r?.data?.data?.sort((r1,r2)=>{
+                let date1=new Date(r1.date_from)
+                let date2=new Date(r2.date_from)
+                return date1-date2
+            })?.map(item => new ReservationModel(item)))
             .catch(err => Promise.reject(err))
     }
 
