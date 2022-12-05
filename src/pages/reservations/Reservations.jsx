@@ -8,7 +8,6 @@ import Button from "../../components/buttons/button/Button";
 import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableButtonGroup";
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../routes/routes';
-import DeleteForm from './deleteForm/DeleteForm';
 import { reservationService } from '../../services/ReservationService';
 import { useQuery } from 'react-query';
 import ReservationForm from './reservationForm/ReservationForm';
@@ -16,6 +15,7 @@ import { storageService } from '../../services/StorageService';
 import { storageKeys, userRoles } from '../../config/config';
 import { DatePicker } from 'antd';
 import '../../components/formFields/dateField/DateField.scss'
+import DeleteForm from '../../components/deleteForm/DeleteForm';
 
 const Reservations = () => {
     const {open, close} = useModal()
@@ -40,7 +40,7 @@ const Reservations = () => {
     const openDeleteModal=(id=null)=>{
         open({
             title: t('reservations.delete.title'),
-            content: <DeleteForm id={id} cancel={close}/>
+            content: <DeleteForm id={id} cancel={close} page={'reservations'}/>
         })
     }
 

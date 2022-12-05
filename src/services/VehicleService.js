@@ -37,7 +37,7 @@ class VehicleService {
             .catch(err => Promise.reject(err))
     }
 
-    edit(data){
+    edit(id,data){
         const formData = {
             "plate_number": data?.plates,
             "production_year": data?.year,
@@ -46,7 +46,7 @@ class VehicleService {
             "daily_rate": data?.price,
             "note": data?.note
         };
-        return requestInstance.put(`${this.api.vehicles}/${data?.id}`, formData)
+        return requestInstance.put(`${this.api.vehicles}/${id}`, formData)
             .then(r => new VehicleModel(r.data))
             .catch(err => Promise.reject(err))
     }

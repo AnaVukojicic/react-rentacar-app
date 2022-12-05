@@ -28,7 +28,7 @@ const VehicleForm = ({type, id, cancel,called=false}) => {
             message.error(t('error-message.api'))
         }))
 
-    const edit = useMutation((data) => vehicleService.edit(data)
+    const edit = useMutation((data) => vehicleService.edit(id,data)
         .then(r => {
             message.success('Success');
             queryClient.invalidateQueries("vehicles")
@@ -42,7 +42,8 @@ const VehicleForm = ({type, id, cancel,called=false}) => {
     const get = (id) => {
         return vehicleService.getVehicleById(id)
             .then(res => {
-                reset(res)
+                reset(res);
+                return res;
             })
             .catch(err => message.error(t('error-message.api')))
     }

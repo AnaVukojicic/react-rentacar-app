@@ -7,12 +7,12 @@ import classes from "../clients/Clients.module.scss";
 import Button from "../../components/buttons/button/Button";
 import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableButtonGroup";
 import VehicleForm from './vehicleForm/VehicleForm';
-import DeleteForm from './deleteForm/DeleteForm';
 import { vehicleService } from '../../services/VehicleService';
 import { useQuery } from 'react-query';
 import { storageService } from '../../services/StorageService';
 import { storageKeys, userRoles } from '../../config/config';
 import { useNavigate } from 'react-router-dom';
+import DeleteForm from '../../components/deleteForm/DeleteForm';
 
 
 const Vehicles = () => {
@@ -41,7 +41,7 @@ const Vehicles = () => {
     const openDeleteModal=(id=null)=>{
         open({
             title: t('vehicles.delete.title'),
-            content: <DeleteForm id={id} cancel={close}/>
+            content: <DeleteForm id={id} cancel={close} page={'vehicles'}/>
         })
     }
 

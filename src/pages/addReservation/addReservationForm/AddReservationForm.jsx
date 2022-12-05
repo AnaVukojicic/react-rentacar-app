@@ -7,31 +7,19 @@ import {t} from 'react-switch-lang';
 import * as yup from 'yup';
 import FormButtonGroup from '../../../components/buttons/formButtonGroup/FormButtonGroup';
 import DateField from '../../../components/formFields/dateField/DateField';
-import InputField from '../../../components/formFields/inputField/InputField';
 import InputNumberField from '../../../components/formFields/inputNumberField/InputNumberField';
 import SelectField from '../../../components/formFields/selectField/SelectField';
 import { clientService } from '../../../services/ClientService';
 import { cityService } from '../../../services/CityService';
-import { useState } from 'react';
 import { useEffect } from 'react';
 import { vehicleService } from '../../../services/VehicleService';
 import { reservationService } from '../../../services/ReservationService';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../../routes/routes';
+import dayjs from 'dayjs';
 
 const AddReservationForm = ({id, cancel}) => {
     const navigate=useNavigate();
-    const [dateFrom,setDateFrom]=useState(0);
-    const [dateTo,setDateTo]=useState(0);
-    const [price,setPrice]=useState(0);
-    const [dateFromFormatted,setDateFromFormatted]=useState();
-
-    const date=new Date();
-    date.setHours(0, 0, 0, 0);
-    const dateFormatted=date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-    const datePlusSeven=new Date((date.getTime()+7*24*60*60*1000));
-    const datePlusSevenFormatted=datePlusSeven.getDate()+"."+(datePlusSeven.getMonth()+1)+"."+datePlusSeven.getFullYear();
-
     const queryClient=useQueryClient();
 
     const add = useMutation((data) => reservationService.add(data)
@@ -49,9 +37,10 @@ const AddReservationForm = ({id, cancel}) => {
     const schema=yup.object().shape({
         clientsName: yup.string().trim().required(t('validation.required')),
         dateFrom: yup.date().required(t('validation.required'))
-                .min(date,t('validation.min-date',{date:dateFormatted})),
+                .min(dayjs(new Date(Date.now())).subtract(1,'day'),t('validation.min-date',{date:dayjs(new Date(Date.now())).format('DD.MM.YYYY.')})),
         dateTo: yup.date().required(t('validation.required'))
-                .min(dateFrom,t('validation.min-date',{date:dateFromFormatted})),
+                .when('dateFrom',(dateFrom,field)=>dayjs(dateFrom) ? field.min(dayjs(dateFrom),t('validation.min-date',{date:dayjs(dateFrom).format('DD.MM.YYYY.')})) : field),
+                // .min(yup.ref("dateFrom"),({min})=>t('validation.min-date',{date:dayjs(min).format('DD.MM.YYYY.')})),
         pickUp: yup.string().trim().required(t('validation.required')),
         dropOff: yup.string().trim().required(t('validation.required'))
     })
@@ -108,42 +97,23 @@ const AddReservationForm = ({id, cancel}) => {
         initialData: []
     })
 
-    const {handleSubmit,control,reset,formState:{errors},setValue}=useForm({resolver:yupResolver(schema)});
+    const {handleSubmit,control,reset,formState:{errors},setValue,watch}=useForm({resolver:yupResolver(schema)});
 
     const onSubmit=(data)=>{
         add.mutate(data)
     }
 
-    const onDateFromChange=(d,ds)=>{
-        setDateFrom(d);
-        setDateFromFormatted(d._d.getDate()+"."+d._d.getMonth()+"."+d._d.getFullYear())
-    }
-
-    const onDateToChange=(d,ds)=>{
-        setDateTo(d);
-    }
+    const dateFields=watch(['dateFrom','dateTo']);
 
     useEffect(()=>{
-        if(dateTo>dateFrom)
-            setPrice((Math.floor((dateTo-dateFrom)/1000/60/60/24))*vehiclePrice)
-    },[dateFrom,dateTo])
-
-    useEffect(()=>{
-        setValue('totalPrice',price)
-    },[price])
-
+        if(dateFields[1]>=dateFields[0])
+            setValue('totalPrice',(Math.floor((dateFields[1]-dateFields[0])/1000/60/60/24))*vehiclePrice)
+        else
+            setValue('totalPrice',0)
+    },[dateFields])
 
     return <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <InputField
-                label={""}
-                name="vehicleId"
-                control={control}
-                placeholder={''}
-                error={errors?.vehicleType?.message}
-                disabled={true}
-                type='hidden'
-            />
             <SelectField
                 label={t('reservations.clients-name')}
                 name="clientsName"
@@ -157,19 +127,17 @@ const AddReservationForm = ({id, cancel}) => {
                 label={t('reservations.date-from')}
                 name='dateFrom'
                 error={errors?.dateFrom?.message}
-                placeholder={dateFormatted}
+                placeholder={dayjs(Date.now()).format('DD.MM.YYYY.')}
                 control={control}
                 disabled={false}
-                onChange={(d,ds)=>onDateFromChange(d,ds)}
             />
             <DateField 
                 label={t('reservations.date-to')}
                 name='dateTo'
                 error={errors?.dateTo?.message}
-                placeholder={datePlusSevenFormatted}
+                placeholder={dayjs(Date.now()).add(7,'day').format('DD.MM.YYYY.')}
                 control={control}
                 disabled={false}
-                onChange={(d,ds)=>onDateToChange(d,ds)}
             />
             <SelectField
                 label={t('reservations.pick-up-location')}
@@ -196,7 +164,6 @@ const AddReservationForm = ({id, cancel}) => {
                 placeholder={t('reservations.placeholders.total-price')}
                 error={errors?.totalPrice?.message}
                 disabled={true}
-                value={price}
                 readOnly={true}
             />
 

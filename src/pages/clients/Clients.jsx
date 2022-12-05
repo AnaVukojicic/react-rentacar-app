@@ -9,11 +9,11 @@ import Button from "../../components/buttons/button/Button";
 import {clientService} from "../../services/ClientService";
 import TableButtonGroup from "../../components/buttons/tableButtonGroup/TableButtonGroup";
 import {useQuery} from "react-query";
-import DeleteForm from './deleteForm/DeleteForm';
 import { useUser } from '../../contexts/UserContext';
 import { storageKeys, userRoles } from '../../config/config';
 import { useNavigate } from 'react-router-dom';
 import { storageService } from '../../services/StorageService';
+import DeleteForm from '../../components/deleteForm/DeleteForm';
 
 
 const Clients = () => {
@@ -53,7 +53,7 @@ const Clients = () => {
     const openDeleteModal=(id=null)=>{
         open({
             title: t('clients.delete.title'),
-            content: <DeleteForm id={id} cancel={close}/>
+            content: <DeleteForm id={id} cancel={close} page={'clients'}/>
         })
     }
 

@@ -1,10 +1,12 @@
+import dayjs from "dayjs";
+
 class ReservationModel {
     constructor(data) {
         this.id = data?.id;
         this.client = data?.customer;
         this.vehicle = data?.vehicle;
         this.dateFrom = data?.date_from;
-        this.dateTo = data?.date_to;
+        this.dateTo = data?.date_to ? data?.date_to : dayjs(this.dateFrom).add(7, 'day');
         this.pickUp = data?.pickup_location;
         this.dropOff = data?.drop_off_location;
         this.totalPrice=data?.price
@@ -27,11 +29,11 @@ class ReservationModel {
     }
 
     getFormattedDateFrom(){
-        return this?.dateFrom.toString().slice(0,10)
+        return dayjs(this.dateFrom).format('DD.MM.YYYY.')
     }
 
     getFormattedDateTo(){
-        return this?.dateTo ? this?.dateTo.toString().slice(0,10) : ''
+        return dayjs(this.dateTo).format('DD.MM.YYYY.')
     }
 }
 

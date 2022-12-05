@@ -13,8 +13,7 @@ const DateField = ({
                         placeholder,
                         disabled = false,
                         control,
-                        picker='date',
-                        onChange=(d,ds)=>{}
+                        picker='date'
 }) => {
     return( 
         <Wrapper label={label} error={error}>
@@ -29,7 +28,6 @@ const DateField = ({
                     disabled={disabled}
                     className={"__date_field"}
                     {...field}
-                    onChange={(d,ds)=>{onChange(d,ds);field.onChange(d,ds)}}
                 />
             )}/>
         }

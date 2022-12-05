@@ -42,7 +42,8 @@ const ClientForm = ({type, id, cancel, called=false}) => {
     const get = (id) => {
         return clientService.getClientById(id)
             .then(res => {
-                reset(res)
+                reset(res);
+                return res;
             })
             .catch(err => message.error(t('error-message.api')))
     }

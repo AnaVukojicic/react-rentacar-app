@@ -10,6 +10,7 @@ import classes from './Dashboard.module.scss';
 import ReservationForm from '../reservations/reservationForm/ReservationForm';
 import { useModal } from '../../contexts/ModalContext';
 import Button from '../../components/buttons/button/Button';
+import dayjs from 'dayjs';
 
 const Dashboard = () => {
     const {open,close}=useModal();
@@ -37,9 +38,8 @@ const Dashboard = () => {
             const curr=new Date();
             const date1=new Date(r?.dateFrom);
             const date2=new Date(r?.dateTo);
-            //Zakomentarisani dio bi trebao da se primijeni ali ne dobijam podatak o dateTo i zbog toga ne moze
-            // return (date1<curr && date2<curr)
-            return date1<curr
+            return (date1<curr && date2<curr)
+            // return date1<curr
         }));
     }
     const current=()=>{
@@ -47,8 +47,8 @@ const Dashboard = () => {
             const curr=new Date();
             const date1=new Date(r?.dateFrom);
             const date2=new Date(r?.dateTo);
-            // return (date1<=curr && date2>=curr)
-            return date1<=curr
+            return (date1<=curr && date2>=curr)
+            // return date1<=curr
         }));
     }
     const future=()=>{
@@ -56,8 +56,8 @@ const Dashboard = () => {
             const curr=new Date();
             const date1=new Date(r?.dateFrom);
             const date2=new Date(r?.dateTo);
-            // return (date1>curr && date2>curr)
-            return date1>curr
+            return (date1>curr && date2>curr)
+            // return date1>curr
         }));
     }
     const all=()=>{
@@ -81,8 +81,8 @@ const Dashboard = () => {
                 {
                     data?.map(row=>{
                         return <ReservationCard
-                                    dateFrom={row?.dateFrom.toString().slice(0,10)}
-                                    dateTo={row?.dateTo?.toString().slice(0,10)}
+                                    dateFrom={dayjs(row?.dateFrom).format('DD.MM.YYYY.')}
+                                    dateTo={dayjs(row?.dateTo).format('DD.MM.YYYY.')}
                                     price={row?.totalPrice}
                                     pickUp={row?.pickUp?.name}
                                     dropOff={row?.dropOff?.name}

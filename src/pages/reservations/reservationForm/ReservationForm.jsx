@@ -14,20 +14,14 @@ import { cityService } from '../../../services/CityService';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { reservationService } from '../../../services/ReservationService';
+import dayjs from 'dayjs';
+
+import weekday from "dayjs/plugin/weekday"
+import localeData from "dayjs/plugin/localeData"
+dayjs.extend(weekday)
+dayjs.extend(localeData)
 
 const ReservationForm = ({type,id, cancel}) => {
-    const [dateFrom,setDateFrom]=useState(0);
-    const [dateTo,setDateTo]=useState(0);
-    const [price,setPrice]=useState(0);
-    const [dateFromFormatted,setDateFromFormatted]=useState();
-    const [reservationChanged,setReservationChanged]=useState(0)
-
-    const date=new Date();
-    date.setHours(0, 0, 0, 0);
-    const dateFormatted=date.getDate()+"."+(date.getMonth()+1)+"."+date.getFullYear();
-    const datePlusSeven=new Date((date.getTime()+7*24*60*60*1000));
-    const datePlusSevenFormatted=datePlusSeven.getDate()+"."+(datePlusSeven.getMonth()+1)+"."+datePlusSeven.getFullYear();
-
     const queryClient=useQueryClient();
 
     const edit = useMutation((data) => reservationService.edit(data)
@@ -42,10 +36,10 @@ const ReservationForm = ({type,id, cancel}) => {
         }))
 
     const schema=yup.object().shape({
-        dateFrom: yup.date().required(t('validation.required'))
-                .min(date,t('validation.min-date',{date:dateFormatted})),
+        dateFrom: yup.date().required(t('validation.required')),
         dateTo: yup.date().required(t('validation.required'))
-                .min(dateFrom,t('validation.min-date',{date:dateFromFormatted})),
+                .when('dateFrom',(dateFrom,field)=>dayjs(dateFrom) ? field.min(dayjs(dateFrom),t('validation.min-date',{date:dayjs(dateFrom).format('DD.MM.YYYY.')})) : field),
+                // .min(yup.ref("dateFrom"),({min})=>t('validation.min-date',{date:dayjs(min).format('DD.MM.YYYY.')})),
         pickUp: yup.string().trim().required(t('validation.required')),
         dropOff: yup.string().trim().required(t('validation.required'))
     })
@@ -64,7 +58,6 @@ const ReservationForm = ({type,id, cancel}) => {
     const getReservationById=(id)=>{
         return reservationService.getReservationById(id)
             .then(res=>{
-                setReservationChanged(prevState=>prevState+1); 
                 reset({
                     id:id,
                     clientsName:res?.client?.first_name+" "+res?.client?.last_name,
@@ -80,7 +73,9 @@ const ReservationForm = ({type,id, cancel}) => {
                     vehiclePrice:res?.vehicle?.daily_rate,
                     idNumber:res?.client?.passport_number,
                     phoneNumber:res?.client?.phone_number,
-                    email:res?.client?.email
+                    email:res?.client?.email,
+                    dateFrom:dayjs(res?.dateFrom),
+                    dateTo:dayjs(res?.dateTo)
                 }); 
                 return res
             })
@@ -92,73 +87,24 @@ const ReservationForm = ({type,id, cancel}) => {
         initialData: []
     })
 
-    const {data:reservation}=useQuery(['reservation-single'],()=>getReservationById(id),{
+    const {data:reservation}=useQuery(['reservation-single',id],()=>getReservationById(id),{
         enabled: Boolean(id),
         initialData: []
     })
 
-    // const getVehicle=()=>{
-    //     return getReservationById(id)
-    //         .then(res=>res?.vehicle)
-    //         .catch(err=>message.error(t('error-message-api')))
-    // }
+    const {handleSubmit,control,reset,formState:{errors},setValue,watch}=useForm({resolver:yupResolver(schema)});
 
-    // const getClient=()=>{
-    //     return getReservationById(id)
-    //         .then(res=>res?.client)
-    //         .catch(err=>message.error(t('error-message-api')))
-    // }
-
-    // const getVehiclePrice=()=>{
-    //     return getVehicle()
-    //         .then(res=> res?.daily_rate)
-    //         .catch(err=>message.error(t('error-message-api')))
-    // }
-
-    // const {data : vehicle} = useQuery(['vehicle-single'], () => getVehicle(), {
-    //     enabled: true,
-    //     initialData: []
-    // })
-
-    // const {data : client} = useQuery(['client-single'], () => getClient(), {
-    //     enabled: true,
-    //     initialData: []
-    // })
-
-    // const {data : vehiclePrice} = useQuery(['vehicle-price'], () => getVehiclePrice(), {
-    //     enabled: true,
-    //     initialData: []
-    // })
-
-    const {handleSubmit,control,reset,formState:{errors},setValue}=useForm({resolver:yupResolver(schema)});
-
-    const onDateFromChange=(d,ds)=>{
-        setDateFrom(d);
-        setDateFromFormatted(d._d.getDate()+"."+d._d.getMonth()+"."+d._d.getFullYear())
-    }
-
-    const onDateToChange=(d,ds)=>{
-        setDateTo(d);
-    }
+    const dateFields=watch(['dateFrom','dateTo']);
 
     useEffect(()=>{
-        if(dateTo>dateFrom)
-            setPrice((Math.floor((dateTo-dateFrom)/1000/60/60/24))*reservation?.vehicle?.daily_rate)
-    },[dateFrom,dateTo])
-
-    useEffect(()=>{
-        setValue('totalPrice',price)
-    },[price])
-
-    useEffect(()=>{
-        setValue('dateFrom','');
-        setValue('dateTo','')
-        console.log(reservation);
-    },[reservationChanged])
+        if(dateFields[1]>=dateFields[0])
+            setValue('totalPrice',(Math.floor((dateFields[1]-dateFields[0])/1000/60/60/24))*reservation?.vehicle?.daily_rate)
+        else
+            setValue('totalPrice',0)
+    },[dateFields])
 
     const onSubmit=(data)=>{
         if(type==='edit'){
-            console.log(data)
             edit.mutate(data)
         }
     }
@@ -167,14 +113,6 @@ const ReservationForm = ({type,id, cancel}) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             {type==='edit' && 
             <>
-            <InputField
-                label={""}
-                name="id"
-                control={control}
-                placeholder={''}
-                error={errors?.id?.message}
-                type="hidden"
-            />
             <InputField
                 label={t('vehicles.plates')}
                 name="vehiclePlates"
@@ -196,19 +134,17 @@ const ReservationForm = ({type,id, cancel}) => {
                 label={t('reservations.date-from')}
                 name='dateFrom'
                 error={errors?.dateFrom?.message}
-                placeholder={dateFormatted}
+                placeholder={dayjs(Date.now()).format('DD.MM.YYYY.')}
                 control={control}
                 disabled={type==='preview' || type==='client-preview'}
-                onChange={(d,ds)=>onDateFromChange(d,ds)}
             />
             <DateField 
                 label={t('reservations.date-to')}
                 name='dateTo'
                 error={errors?.dateTo?.message}
-                placeholder={datePlusSevenFormatted}
+                placeholder={dayjs(Date.now()).add(7,'day').format('DD.MM.YYYY.')}
                 control={control}
                 disabled={type==='preview' || type==='client-preview'}
-                onChange={(d,ds)=>onDateToChange(d,ds)}
             />
             <SelectField
                 label={t('reservations.pick-up-location')}
@@ -234,7 +170,6 @@ const ReservationForm = ({type,id, cancel}) => {
                 control={control}
                 placeholder={t('reservations.placeholders.total-price')}
                 error={errors?.totalPrice?.message}
-                value={price}
                 readOnly={true}
             />
             {(type==='preview' || type==='client-preview') &&
